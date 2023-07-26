@@ -1,4 +1,9 @@
 PRAGMA foreign_keys = ON;
+DROP TABLE IF EXISTS question_follows; 
+DROP TABLE IF EXISTS replies;
+DROP TABLE IF EXISTS question_likes;
+DROP TABLE IF EXISTS questions;
+DROP TABLE IF EXISTS users;
 
 CREATE TABLE users (
     id INTEGER PRIMARY KEY,
@@ -68,12 +73,18 @@ INSERT INTO
     replies (body, question_id, user_id, reply_id)
 VALUES
     ('good question', (SELECT id FROM questions WHERE title = 'Chicken'), (SELECT id FROM users WHERE fname = 'Klodian' AND lname = 'Behrami'), NULL),
-    ('thanks', (SELECT id FROM questions WHERE title = 'Chicken'), (SELECT id FROM users WHERE fname = 'Dennis' AND lname = 'Lee'), (SELECT id FROM replies WHERE body = 'good question')),
     ('its raining', (SELECT id FROM questions WHERE title = 'general'), (SELECT id FROM users WHERE fname = 'Klodian' AND lname = 'Behrami'), NULL);
+
+INSERT INTO 
+    replies (body, question_id, user_id, reply_id)
+VALUES 
+    ('thanks', (SELECT id FROM questions WHERE title = 'Chicken'), (SELECT id FROM users WHERE fname = 'Dennis' AND lname = 'Lee'), (SELECT id FROM replies WHERE body = 'good question'));
 
 INSERT INTO 
     question_likes(user_id, question_id)
 VALUES 
     ((SELECT id FROM users WHERE fname = 'Klodian' AND lname = 'Behrami'), (SELECT id FROM questions WHERE title = 'Chicken')),
     ((SELECT id FROM users WHERE fname = 'Dennis' AND lname = 'Lee'), (SELECT id FROM questions WHERE title = 'general'));
+
+
     
