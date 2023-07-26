@@ -1,5 +1,6 @@
 require 'singleton'
 require 'sqlite3'
+
 class QuestionsDBConnection < SQLite3::Database 
     include Singleton 
     
@@ -16,6 +17,19 @@ class User
         # data => [ {id: 1, fname: klodian, lname: b}, {id: 2, fname: dennis, lname: lee } ] 
         data.map { |datum| User.new(datum) }
         # => [ <User#12391928: id:> ]
+    end
+
+    def self.find_by_id(num)
+        sql_query = "SELECT * FROM users WHERE id = " + num.to_s
+        result = QuestionsDBConnection.instance.execute(<<-SQL, num)
+        SELECT 
+            *
+        FROM 
+            users
+        WHERE
+            id = ?
+        SQL
+        User.new(result.first)
     end
 
     def initialize(options) # hash
